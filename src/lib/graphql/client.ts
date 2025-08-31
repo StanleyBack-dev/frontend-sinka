@@ -8,6 +8,7 @@ const graphqlUrl =
 export const client = new ApolloClient({
   link: new HttpLink({
     uri: graphqlUrl as string,
+    credentials: "include",
   }),
   cache: new InMemoryCache(),
 });

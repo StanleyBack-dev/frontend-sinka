@@ -2,38 +2,23 @@
 
 import { useState } from "react";
 import { useMutation } from "@apollo/client/react";
-import { LOGIN_MUTATION } from "@/lib/graphql/mutation";
+import { LOGIN_MUTATION } from "@/app/login/mutations";
 import { client } from "@/lib/graphql/client";
 import styles from "./LoginPage.module.css";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
-
-type LoginResponse = {
-  login: {
-    token: string;
-    accessToken: string;
-    user: {
-      id: string;
-      name: string;
-      email: string;
-    };
-  };
-};
+import { Login } from "./types";
 
 export default function LoginForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
-  const [login, { loading, error }] = useMutation<LoginResponse>(LOGIN_MUTATION, {
+  const [login, { loading, error }] = useMutation<Login>(LOGIN_MUTATION, {
     client,
     onCompleted: (data) => {
-      if (data.login.accessToken) {
-        localStorage.setItem("token", data.login.accessToken);
-        window.location.href = "/dashboard";
-      }
+      window.location.href = "/dashboard";
     },
   });
-
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
