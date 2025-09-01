@@ -1,7 +1,6 @@
 "use client";
 
 import { Customer } from "./types";
-import { MutationFunction } from "@apollo/client";
 
 interface CustomerTableProps {
   customers: Customer[];
@@ -9,9 +8,9 @@ interface CustomerTableProps {
   setEditingId: (id: string | null) => void;
   newCustomer: Partial<Customer>;
   setNewCustomer: (customer: Partial<Customer>) => void;
-  createCustomer: MutationFunction<any, { input: Partial<Customer> }>;
-  updateCustomer: MutationFunction<any, { id: string; input: Customer }>;
-  deleteCustomer: MutationFunction<any, { id: string }>;
+  createCustomer: (options: { variables: { input: Partial<Customer> } }) => Promise<any>;
+  updateCustomer: (options: { variables: { id: string; input: Customer } }) => Promise<any>;
+  deleteCustomer: (options: { variables: { id: string } }) => Promise<any>;
   refetch: () => void;
 }
 
@@ -28,22 +27,34 @@ export function CustomerTable({
 }: CustomerTableProps) {
   const handleAddCustomer = async () => {
     if (!confirm("Deseja realmente adicionar este cliente?")) return;
-    await createCustomer({ variables: { input: newCustomer } });
-    refetch();
-    setNewCustomer({ status: true });
+    try {
+      await createCustomer({ variables: { input: newCustomer } });
+      refetch();
+      setNewCustomer({ status: true });
+    } catch (err) {
+      console.error("Erro ao criar cliente:", err);
+    }
   };
 
   const handleUpdateCustomer = async (customer: Customer) => {
     if (!confirm("Deseja realmente atualizar este cliente?")) return;
-    await updateCustomer({ variables: { id: customer.public_id_customers, input: customer } });
-    refetch();
-    setEditingId(null);
+    try {
+      await updateCustomer({ variables: { id: customer.public_id_customers, input: customer } });
+      refetch();
+      setEditingId(null);
+    } catch (err) {
+      console.error("Erro ao atualizar cliente:", err);
+    }
   };
 
   const handleDeleteCustomer = async (id: string) => {
     if (!confirm("Deseja realmente deletar este cliente?")) return;
-    await deleteCustomer({ variables: { id } });
-    refetch();
+    try {
+      await deleteCustomer({ variables: { id } });
+      refetch();
+    } catch (err) {
+      console.error("Erro ao deletar cliente:", err);
+    }
   };
 
   const totalCustomers = customers.length;

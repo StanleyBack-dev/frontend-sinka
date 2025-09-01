@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useQuery, useMutation } from "@apollo/client";
+import { useQuery, useMutation } from '@apollo/client/react';
 import { GET_CUSTOMERS_QUERY } from "./queries";
 import { CREATE_CUSTOMER_MUTATION, UPDATE_CUSTOMER_MUTATION, DELETE_CUSTOMER_MUTATION} from "./mutations";
 import { Customer } from "./types";
