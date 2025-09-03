@@ -1,21 +1,19 @@
 import { gql } from "@apollo/client";
 
 export const CREATE_CUSTOMER_MUTATION = gql`
-  mutation CreateCustomer($input: CustomerInput!) {
-    createCustomer(input: $input) {
-      public_id_customers
+  mutation CreateCustomers($data: CreateCustomersDto!) {
+    createCustomers(data: $data) {
       name
       last_name
       cpf
       email
       contact
-      status
-      image_url
-      created_at
       created_by
+      image_url
     }
   }
 `;
+
 
 export const UPDATE_CUSTOMER_MUTATION = gql`
   mutation UpdateCustomer($id: ID!, $input: CustomerInput!) {
